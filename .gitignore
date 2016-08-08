@@ -1,0 +1,77 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+*.sass-cache
+*.scssc
+*.sassc
+
+# OS or Editor folders
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+
+# Komodo
+*.komodoproject
+.komodotools
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+node_modules
+bower_components
+_temp
+.vagrant
+id_rsa
+deb
+*.deb
+
+# Pub ignores
+.pub
+packages
+.packages
+build/
+# dartdoc ignores
+web/api
+
+# IDEA project file ignores
+.idea/*
+
+# Should not track the output of code coverage for now
+coverage/
+integrate/pubspec.lock
+
+# Skynet ignores
+skynet.Dockerfile
+test_reports/
+
+# Files created by dart2js
+# (Most Dart developers will use pub build to compile Dart, use/modify these
+#  rules if you intend to use dart2js directly
+#  Convention is to use extension '.dart.js' for Dart compiled to Javascript to
+#  differentiate from explicit Javascript files)
+*.part.js
+*.js.deps
+*.info.json
+
+# Directory created by dartdoc
+doc/api/
+
+# Don't commit pubspec lock file
+# (Library packages only! Remove pattern if developing an application package)
+pubspec.lock

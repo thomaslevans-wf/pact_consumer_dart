@@ -1,0 +1,34 @@
+{
+  "name": "pact_consumer_dart",
+  "version": "1.0.0",
+  "description": "Dart Pact Consumer Library [![Build Status](https://travis-ci.org/thomaslevans-wf/pact_consumer_dart.svg?branch=master)](https://travis-ci.org/thomaslevans-wf/pact_consumer_dart) [![codecov.io](https://codecov.workiva.net/github/thomaslevans-wf/pact_consumer_dart/coverage.svg?branch=master)](https://codecov.workiva.net/github/thomaslevans-wf/pact_consumer_dart?branch=master)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "cz-conventional-changelog": "^1.1.7"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^1.1.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomaslevans-wf/pact_consumer_dart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomaslevans-wf/pact_consumer_dart/issues"
+  },
+  "homepage": "https://github.com/thomaslevans-wf/pact_consumer_dart#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

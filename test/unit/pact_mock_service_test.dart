@@ -5,6 +5,7 @@ import 'package:pact_consumer_dart/src/pact_mock_service.dart';
 import 'package:pact_consumer_dart/src/pact_interaction.dart';
 
 import '../fixtures/pact_mock_service_fixture.dart';
+import 'package:w_transport/w_transport.dart';
 
 main() {
   group('MockService', () {
@@ -17,7 +18,7 @@ main() {
         setUp(() {
           var opts = fixture;
           Uri uri = Uri.parse(
-              'http://' + opts['host'] + ':' + opts['port'] + '/session');
+              'http://' + opts['host'] + ':' + opts['port'] + '/interactions');
 
           MockTransports.reset();
           MockTransports.http
@@ -44,7 +45,8 @@ main() {
             'provider': 'Provider',
             'port': '1234'
           };
-          Uri uri = Uri.parse('http://127.0.0.1:' + opts['port'] + '/session');
+          Uri uri =
+              Uri.parse('http://127.0.0.1:' + opts['port'] + '/interactions');
 
           MockTransports.reset();
           MockTransports.http
@@ -98,7 +100,7 @@ main() {
 
       group('when there is a bad response', () {
         setUp(() {
-          Uri uri = Uri.parse('http://localhost:1234/session');
+          Uri uri = Uri.parse('http://localhost:1234/interactions');
 
           MockTransports.reset();
 
@@ -118,7 +120,7 @@ main() {
 
       group('when there is a success response', () {
         setUp(() {
-          Uri uri = Uri.parse('http://localhost:1234/session');
+          Uri uri = Uri.parse('http://localhost:1234/interactions');
 
           MockTransports.reset();
 
@@ -146,7 +148,8 @@ main() {
         });
 
         test('should return an instance of PactInteraction', () {
-          var match = mockService.given('a provider state');
+          var match =
+              mockService.given('a provider state', 'that has a description');
 
           expect(match, new isInstanceOf<PactInteraction>());
         });
@@ -159,7 +162,21 @@ main() {
 
         test('should throw StateError', () {
           var callGiven = () {
-            mockService.given('');
+            mockService.given('', 'that has a description');
+          };
+
+          expect(callGiven, throwsStateError);
+        });
+      });
+
+      group('when passed an invalid String as `description`', () {
+        setUp(() {
+          mockService = new PactMockService(fixture);
+        });
+
+        test('should throw StateError', () {
+          var callGiven = () {
+            mockService.given('a providerState', '');
           };
 
           expect(callGiven, throwsStateError);
@@ -174,16 +191,15 @@ main() {
         mockService = new PactMockService(fixture);
       });
 
-      group('when called and there are interactions staged', () {
+      group('when called and there is an interaction staged', () {
         setUp(() {
           Uri uri = Uri.parse('http://localhost:1234/interactions');
 
           // create some interactions
-          mockService
-              .given('a Provider state')
-              .uponReceiving('a request for a resource')
-              .withRequest('GET', '/resource')
-              .willRespondWith(200,
+          var interaction = mockService
+              .given('a Provider state', 'a request for a resource')
+              .when('GET', '/resource')
+              .then(200,
                   headers: {'Content-Type': 'application/json'},
                   body: {'resource': 'a_resource'});
 
@@ -192,18 +208,15 @@ main() {
 
           // setup a handler to verify the interactions were part of the request
           var requestHandler = (FinalizedRequest request) async {
-            if (request.method == 'PUT') {
-              var body = request.body;
+            if (request.method == 'POST') {
+              HttpBody body = request.body;
+              Map bodyMap = body.asJson();
+              List mapKeys = interaction.toMap().keys.toList();
 
-//              if (body.asJson() is List) {
-//                return new MockResponse.ok();
-//              }
-//              print('--------------------------------------------');
-//              print(request.headers);
-//              print(request.body);
-//              print(body.asString());
-//              print('--------------------------------------------');
-              return new MockResponse.ok();
+              // Check that all the properties of the interaction are received
+              if (bodyMap.keys.every((elem) => mapKeys.contains(elem))) {
+                return new MockResponse.ok();
+              }
             }
 
             return new MockResponse.badRequest();
@@ -212,7 +225,7 @@ main() {
           MockTransports.http.when(uri, requestHandler);
         });
 
-        test('should `PUT` any interactions', () async {
+        test('should `POST` the staged interaction', () async {
           var match = await mockService.setup();
           expect(match, new isInstanceOf<PactMockService>());
         });

@@ -34,6 +34,7 @@ nbproject
 .svn
 .CVS
 node_modules
+pacts
 bower_components
 _temp
 .vagrant
@@ -75,3 +76,10 @@ doc/api/
 # Don't commit pubspec lock file
 # (Library packages only! Remove pattern if developing an application package)
 pubspec.lock
+
+# Ignore files created by rbenv/ruby while working with Pact
+.ruby-version
+
+# Ignore directories used during contract tests
+/tmp
+/pacts

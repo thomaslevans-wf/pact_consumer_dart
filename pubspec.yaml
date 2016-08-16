@@ -1,16 +1,25 @@
 name: pact_consumer_dart
 version: 0.1.0
-description: Pact implemetation for dart
+description: >
+  Pact consumer library implemented in dart. This library is platform agnostic and depends on w_transport.
+authors:
+  - Tom Evans <thomas.evans@workiva.com>
+homepage:
+  https://github.com/thomaslevans-wf/pact_consumer_dart
+
+environment:
+  sdk: ">=1.17.1 < 2.0.0"
+
 dependencies:
   w_transport: "^2.9.1"
+
 dev_dependencies:
   coverage: "^0.7.2"
   dart_dev: "^1.4.0"
   dart_style: "^0.2.0"
   dartdoc: "^0.8.0"
   test: "^0.12.15"
-environment:
-  sdk: ">=1.17.1 < 2.0.0"
+  
 transformers:
   - test/pub_serve:
       $include: test/**_test{.*,}.dart

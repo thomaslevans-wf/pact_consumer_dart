@@ -1,3 +1,17 @@
+// Copyright 2015 Workiva Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'package:test/test.dart';
 import 'package:w_transport/w_transport_mock.dart';
 
@@ -8,7 +22,7 @@ import '../fixtures/pact_mock_service_fixture.dart';
 import 'package:w_transport/w_transport.dart';
 
 main() {
-  group('MockService', () {
+  group('PactMockService', () {
     Map fixture = pactMockServiceFixture;
 
     group('constructor params', () {
@@ -16,15 +30,19 @@ main() {
 
       group('when `host` is provided', () {
         setUp(() {
-          var opts = fixture;
-          Uri uri = Uri.parse(
-              'http://' + opts['host'] + ':' + opts['port'] + '/interactions');
+          Uri uri = Uri.parse('http://' +
+              fixture['host'] +
+              ':' +
+              fixture['port'] +
+              '/interactions');
 
           MockTransports.reset();
           MockTransports.http
               .expect('DELETE', uri, respondWith: new MockResponse.ok());
 
-          mockService = new PactMockService(opts);
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              host: fixture['host']);
         });
 
         test('should use the host option in request', () {
@@ -40,19 +58,15 @@ main() {
 
       group('when no `host` is provided', () {
         setUp(() {
-          var opts = {
-            'consumer': 'Consumer',
-            'provider': 'Provider',
-            'port': '1234'
-          };
-          Uri uri =
-              Uri.parse('http://127.0.0.1:' + opts['port'] + '/interactions');
+          Uri uri = Uri
+              .parse('http://127.0.0.1:' + fixture['port'] + '/interactions');
 
           MockTransports.reset();
           MockTransports.http
               .expect('DELETE', uri, respondWith: new MockResponse.ok());
 
-          mockService = new PactMockService(opts);
+          mockService =
+              new PactMockService(fixture['consumer'], fixture['provider']);
         });
 
         test('should use the default host in request', () {
@@ -67,26 +81,38 @@ main() {
       });
 
       group('when `port` is NOT provided', () {
-        test('should throw a StateError', () {
-          var opts = {'consumer': 'Consumer', 'provider': 'Provider'};
-          var callConst = () {
-            new PactMockService(opts);
-          };
-          expect(callConst, throwsStateError);
+        setUp(() {
+          Uri uri = Uri.parse('http://${fixture['host']}:1234/interactions');
+
+          MockTransports.reset();
+          MockTransports.http
+              .expect('DELETE', uri, respondWith: new MockResponse.ok());
+
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              host: fixture['host']);
+        });
+
+        test('should use the default port, 1234', () {
+          expect(mockService.resetSession(), completes);
         });
       });
 
       group('when `port` is provided', () {
-        test('should NOT throw a StateError', () {
-          var opts = {
-            'consumer': 'Consumer',
-            'provider': 'Provider',
-            'port': '1234'
-          };
-          var callConst = () {
-            new PactMockService(opts);
-          };
-          expect(callConst, returnsNormally);
+        setUp(() {
+          var port = '4321';
+          Uri uri = Uri.parse('http://127.0.0.1:$port/interactions');
+
+          MockTransports.reset();
+          MockTransports.http
+              .expect('DELETE', uri, respondWith: new MockResponse.ok());
+
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              port: port);
+        });
+        test('should use the provided port', () {
+          expect(mockService.resetSession(), completes);
         });
       });
     });
@@ -95,7 +121,9 @@ main() {
       PactMockService mockService;
 
       setUp(() {
-        mockService = new PactMockService(fixture);
+        mockService = new PactMockService(
+            fixture['consumer'], fixture['provider'],
+            host: fixture['host']);
       });
 
       group('when there is a bad response', () {
@@ -144,7 +172,9 @@ main() {
 
       group('when passed a valid String as `providerState`', () {
         setUp(() {
-          mockService = new PactMockService(fixture);
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              host: fixture['host']);
         });
 
         test('should return an instance of PactInteraction', () {
@@ -157,7 +187,9 @@ main() {
 
       group('when passed an invalid String as `providerState`', () {
         setUp(() {
-          mockService = new PactMockService(fixture);
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              host: fixture['host']);
         });
 
         test('should throw StateError', () {
@@ -171,7 +203,9 @@ main() {
 
       group('when passed an invalid String as `description`', () {
         setUp(() {
-          mockService = new PactMockService(fixture);
+          mockService = new PactMockService(
+              fixture['consumer'], fixture['provider'],
+              host: fixture['host']);
         });
 
         test('should throw StateError', () {
@@ -188,7 +222,9 @@ main() {
       PactMockService mockService;
 
       setUp(() {
-        mockService = new PactMockService(fixture);
+        mockService = new PactMockService(
+            fixture['consumer'], fixture['provider'],
+            host: fixture['host']);
       });
 
       group('when called and there is an interaction staged', () {
@@ -251,7 +287,9 @@ main() {
         verifyUri =
             Uri.parse('http://localhost:1234/interactions/verification');
         writeUri = Uri.parse('http://localhost:1234/pact');
-        mockService = new PactMockService(fixture);
+        mockService = new PactMockService(
+            fixture['consumer'], fixture['provider'],
+            host: fixture['host']);
       });
 
       group('when the interaction is verified and the pact is written', () {

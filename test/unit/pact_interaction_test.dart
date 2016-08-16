@@ -1,42 +1,23 @@
+// Copyright 2015 Workiva Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'package:test/test.dart';
 
 import 'package:pact_consumer_dart/src/pact_interaction.dart';
 
 main() {
   group('PactInteraction', () {
-    group('uponReceiving', () {
-      PactInteraction interaction;
-
-      group('when passed a valid String as `description`', () {
-        setUp(() {
-          interaction = new PactInteraction();
-        });
-
-        test(
-            'should return the instance of PactInteraction with the description set',
-            () {
-          var match = interaction.uponReceiving('a description');
-
-          expect(match, new isInstanceOf<PactInteraction>());
-          expect(match, equals(interaction));
-        });
-      });
-
-      group('when passed an invalid String as provider state', () {
-        setUp(() {
-          interaction = new PactInteraction();
-        });
-
-        test('should throw StateError', () {
-          var callUponReceiving = () {
-            interaction.uponReceiving('');
-          };
-
-          expect(callUponReceiving, throwsStateError);
-        });
-      });
-    });
-
     group('when', () {
       PactInteraction interaction;
 

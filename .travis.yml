@@ -32,4 +32,4 @@ script:
 
 after_success:
   # Send coverage report to codecov
-  - bash <(curl -s https://codecov.io/bash)
+  - bash ./tool/codecov.sh

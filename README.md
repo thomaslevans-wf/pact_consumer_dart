@@ -1,8 +1,12 @@
 # pact_consumer_dart
-Dart Pact Consumer Library
+
+[![Pub](https://img.shields.io/pub/v/pact_consumer_dart.svg)](https://pub.dartlang.org/packages/pact_consumer_dart)
+[![documentation](https://img.shields.io/badge/Documentation-pact_consumer_dart-blue.svg)](https://www.dartdocs.org/documentation/pact_consumer_dart/latest/)
 [![Build Status](https://travis-ci.org/thomaslevans-wf/pact_consumer_dart.svg?branch=master)](https://travis-ci.org/thomaslevans-wf/pact_consumer_dart)
-[![codecov.io](https://codecov.workiva.net/github/thomaslevans-wf/pact_consumer_dart/coverage.svg?branch=master)](https://codecov.workiva.net/github/thomaslevans-wf/pact_consumer_dart?branch=master)
+[![codecov](https://codecov.io/gh/thomaslevans-wf/pact_consumer_dart/branch/master/graph/badge.svg)](https://codecov.io/gh/thomaslevans-wf/pact_consumer_dart)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+Dart Pact Consumer Library
 An implementation of the Pact Consumer library for Dart. A 'How to Contribute' section will be up soon with specific guidelines on contributing. Feel free to open issues for any bugs or features requests.
 
 ## [The Pact Gem](https://github.com/bethesque/pact-mock_service)

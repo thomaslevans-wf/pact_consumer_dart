@@ -1,5 +1,5 @@
 name: pact_consumer_dart
-version: 0.1.0
+version: 0.1.0-rc1
 description: >
   Pact consumer library implemented in dart. This library is platform agnostic and depends on w_transport.
 authors:
@@ -19,7 +19,7 @@ dev_dependencies:
   dart_style: "^0.2.0"
   dartdoc: "^0.8.0"
   test: "^0.12.15"
-  
+
 transformers:
   - test/pub_serve:
       $include: test/**_test{.*,}.dart

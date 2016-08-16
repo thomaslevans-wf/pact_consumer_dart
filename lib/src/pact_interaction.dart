@@ -1,68 +1,81 @@
 class PactInteraction {
-  String providerState;
-  String description;
-  Map request;
-  Map response;
+  String _providerState;
+  String _description;
+  Map _request;
+  Map _response;
 
   PactInteraction() {
-    this.providerState = null;
-    this.description = '';
-    this.request = new Map();
-    this.response = new Map();
+    _providerState = '';
+    _description = '';
+    _request = new Map();
+    _response = new Map();
   }
 
-  PactInteraction given(String providerState) {
-    this.providerState = providerState;
+  PactInteraction given(String providerState, String description) {
+    if (providerState.isEmpty) {
+      throw new StateError(
+          'PactInteraction.given := `providerState` cannot be an empty String.');
+    }
+    _providerState = providerState;
+
+    if (description.isEmpty) {
+      throw new StateError(
+          'PactInteraction.uponReceiving := `description` cannot be an empty String.');
+    }
+    _description = description;
+
     return this;
   }
+
+  Map get request => _request;
+  Map get response => _response;
 
   PactInteraction uponReceiving(String description) {
     if (description.isEmpty) {
       throw new StateError(
           'PactInteraction.uponReceiving := `description` cannot be an empty String.');
     }
-    this.description = description;
+    _description = description;
     return this;
   }
 
-  PactInteraction withRequest(String method, String path, {Map opts}) {
+  PactInteraction when(String method, String path,
+      {Map headers, Map query, Map body}) {
     if (method.isEmpty || path.isEmpty) {
       throw new StateError(
           'PactInteraction.withRequest := `method` and `path` cannot be empty Strings');
     }
-    this.request['method'] = method;
-    this.request['path'] = path;
+    _request['method'] = method;
+    _request['path'] = path;
 
-    if (opts != null) {
-      if (opts.containsKey('query')) {
-        this.request['query'] = opts['query'];
-      }
+    if (query != null) {
+      _request['query'] = query;
+    }
 
-      if (opts.containsKey('headers')) {
-        this.request['headers'] = opts['headers'];
-      }
+    if (headers != null) {
+      _request['headers'] = headers;
+    }
 
-      if (opts.containsKey('body')) {
-        this.request['body'] = opts['body'];
-      }
+    if (body != null) {
+      _request['body'] = body;
     }
 
     return this;
   }
 
-  PactInteraction willRespondWith(int status, {Map headers, Map body}) {
+  PactInteraction then(int status, {Map headers, Map body}) {
     if (status == null) {
       throw new StateError(
           'PactInteraction.willRespondWith := `status` cannot be null');
     }
-    this.response['status'] = status;
+    _response['status'] = status;
 
     if (headers != null) {
-      this.response['headers'] = headers;
+      _response['headers'] = headers;
     }
 
     if (body != null) {
-      this.response['body'] = body;
+      _response['body'] = body;
     }
 
     return this;
@@ -70,10 +83,10 @@ class PactInteraction {
 
   Map toMap() {
     return {
-      'providerState': this.providerState,
-      'description': this.description,
-      'request': this.request,
-      'response': this.response
+      'provider_state': _providerState,
+      'description': _description,
+      'request': _request,
+      'response': _response
     };
   }
 }

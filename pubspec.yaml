@@ -1,6 +1,6 @@
 name: pact_consumer_dart
-version: 0.0.1
-description: Dart implemetation for dart
+version: 0.1.0
+description: Pact implemetation for dart
 dependencies:
   w_transport: "^2.9.1"
 dev_dependencies:

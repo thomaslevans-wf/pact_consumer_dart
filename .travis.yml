@@ -1,14 +1,35 @@
+sudo: required
+
 language: dart
 dart:
   - stable
 with_content_shell: true
+
+services:
+  - docker
+
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+  # Fire up the docker image with Pact
+  - docker pull madkom/pact-mock-service
+  - docker run -d -p 127.0.0.1:1234:1234 -v /tmp/log:/var/log/pacto -v /tmp/contracts:/opt/contracts madkom/pact-mock-service
+
 script:
+  # Run static analysis checks
   - pub run dart_dev format --check
   - pub run dart_dev analyze
+
+  # Run unit tests
   - pub run dart_dev test
+
+  # Run integration tests
+  - pub run dart_dev test --no-pub-serve --no-unit --integration -p vm
+
+  # Get test coverage data
   - pub run dart_dev coverage --no-html
+
 after_success:
+  # Send coverage report to codecov
   - bash <(curl -s https://codecov.io/bash)

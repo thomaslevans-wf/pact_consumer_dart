@@ -16,7 +16,12 @@ main(List<String> args) async {
   // config.format
   // config.test
 
-  config.analyze.entryPoints = ['lib/', 'test/unit/', 'tool/'];
+  config.analyze.entryPoints = [
+    'lib/',
+    'test/unit/',
+    'test/integration',
+    'tool/'
+  ];
 
   config.coverage..pubServe = true;
 
@@ -25,9 +30,9 @@ main(List<String> args) async {
   config.format.directories = ['lib/', 'test/', 'tool'];
 
   config.test
+    ..integrationTests = ['test/integration/generated_runner_test.dart']
     ..unitTests = ['test/unit/generated_runner_test.dart']
-    ..platforms = ['vm', 'content-shell']
-    ..pubServe = true;
+    ..platforms = ['vm'];
 
   await dev(args);
 }

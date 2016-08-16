@@ -37,7 +37,7 @@ main() {
       });
     });
 
-    group('withRequest', () {
+    group('when', () {
       PactInteraction interaction;
 
       group('when called with method, path, headers, and body', () {
@@ -48,19 +48,17 @@ main() {
         test('should return the interaction with a fully formed request', () {
           var method = 'POST';
           var path = '/resources';
-          var opts = {
-            'headers': {'Content-Type': 'application/json'},
-            'body': {'resourceKey': 'resourceValue'}
-          };
-          var match = interaction.withRequest(method, path, opts: opts);
+          var headers = {'Content-Type': 'application/json'};
+          var body = {'resourceKey': 'resourceValue'};
+          var match =
+              interaction.when(method, path, headers: headers, body: body);
 
           expect(match.request, isNotNull);
           expect(match.request['method'], equals(method));
           expect(match.request['path'], equals(path));
-          expect(match.request['headers'].toString(),
-              equals(opts['headers'].toString()));
-          expect(match.request['body'].toString(),
-              equals(opts['body'].toString()));
+          expect(
+              match.request['headers'].toString(), equals(headers.toString()));
+          expect(match.request['body'].toString(), equals(body.toString()));
         });
       });
 
@@ -70,7 +68,7 @@ main() {
         });
 
         test('should return the instance of PactInteraction', () {
-          var match = interaction.withRequest('GET', 'a/path');
+          var match = interaction.when('GET', 'a/path');
 
           expect(match, new isInstanceOf<PactInteraction>());
         });
@@ -83,7 +81,7 @@ main() {
 
         test('should throw a StateError', () {
           var callWithRequest = () {
-            interaction.withRequest('', 'a/path');
+            interaction.when('', 'a/path');
           };
 
           expect(callWithRequest, throwsStateError);
@@ -97,7 +95,7 @@ main() {
 
         test('should throw a StateError', () {
           var callWithRequest = () {
-            interaction.withRequest('GET', '');
+            interaction.when('GET', '');
           };
 
           expect(callWithRequest, throwsStateError);
@@ -105,7 +103,7 @@ main() {
       });
     });
 
-    group('willRespondWith', () {
+    group('then', () {
       PactInteraction interaction;
 
       group('when called with `headers` and `body` params', () {
@@ -116,8 +114,7 @@ main() {
         test('should return the instance of PactInteraction', () {
           var headers = {'Content-Type': 'application/json'};
           var body = {'someKey': 'someValue'};
-          var match =
-              interaction.willRespondWith(200, headers: headers, body: body);
+          var match = interaction.then(200, headers: headers, body: body);
 
           expect(match, new isInstanceOf<PactInteraction>());
         });

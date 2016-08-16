@@ -7,9 +7,13 @@ import 'package:pact_consumer_dart/src/pact_mock_service_requests.dart';
 class PactMockService {
   String _host;
   String _baseUrl;
-  List<Map> _interactions;
+  List<PactInteraction> _interactions;
   Map _pactDetails;
 
+  /// Constructs an instance of PactMockService
+  ///
+  /// throws [StateError] if [port] is not supplied in the [opts] Map
+  ///
   PactMockService(Map opts) {
     // throw StateError if `opts` doesn't include `port`
     if (opts['port'] == null) {
@@ -22,7 +26,8 @@ class PactMockService {
     _baseUrl = 'http://' + _host + ':' + opts['port'];
     _pactDetails = {
       'consumer': {'name': opts['consumer']},
-      'provider': {'name': opts['provider']}
+      'provider': {'name': opts['provider']},
+      'pact_dir': (opts['dir'] != null) ? opts['dir'] : 'pacts'
     };
   }
 
@@ -38,32 +43,39 @@ class PactMockService {
     }
   }
 
-  PactInteraction given(String providerState) {
+  PactInteraction given(String providerState, String description) {
     if (providerState.isEmpty) {
       throw new StateError(
-          'creating PactInteraction, `providerState` cannot be an empty String.');
+          'while creating PactInteraction, `providerState` cannot be an empty String.');
     }
 
-    PactInteraction interaction = (new PactInteraction()).given(providerState);
-    _interactions.add(interaction.toMap());
+    if (description.isEmpty) {
+      throw new StateError(
+          'while creating PactInteraction, `description` cannot be an empty String.');
+    }
+
+    PactInteraction interaction =
+        (new PactInteraction()).given(providerState, description);
+    _interactions.add(interaction);
     return interaction;
   }
 
   Future setup() async {
     // PUT the new interactions
     if (_interactions.isEmpty) {
-      throw new StateError('setting up interactions, no interactions staged!');
+      throw new StateError(
+          'while setting up interactions, no interactions staged!');
     }
 
-    var interactions = _interactions.toList();
+    for (PactInteraction interaction in _interactions) {
+      Response res = await PactMockServiceRequests.postInteraction(
+          interaction.toMap(), _baseUrl);
+
+      if (res.status != 200) {
+        throw new StateError(res.statusText);
+      }
+    }
     _interactions.clear();
-
-    Response res =
-        await PactMockServiceRequests.putInteractions(interactions, _baseUrl);
-
-    if (res.status != 200) {
-      throw new StateError(res.statusText);
-    }
 
     return this;
   }

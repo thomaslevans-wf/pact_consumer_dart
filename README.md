@@ -21,11 +21,14 @@ $ pact-mock-service start -p 1234
 ### Running Pact from docker
 There is a docker image available to run [here](https://github.com/madkom/docker/tree/master/pact-mock-service) as opposed to running the gem locally.
 
-_Note: This assumes you at least have docker available_
+_Note: This assumes you have docker available_
 
 ```
 $ docker run -d -p 127.0.0.1:1234:1234 -v /tmp/log:/var/log/pacto -v /tmp/contracts:/opt/contracts madkom/pact-mock-service
 ```
+
+_Note: Checkout /tool/scripts/integration_setup_and_run_task.sh for a usage example_
+
 
 ## Pact Consumer API
 At the core of the consumer library is the concept of interactions. Interactions are the building blocks of the contract between the Provider and the Consumer of a service. An interaction can be decomposed using a BDD style to the following statement.

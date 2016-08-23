@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-import 'dart:io';
 import 'package:test/test.dart';
 import 'package:w_transport/w_transport.dart';
 import 'package:w_transport/w_transport_vm.dart';
@@ -33,7 +32,7 @@ main() {
         await mockService.resetSession();
 
         // define an interaction
-        mockService.given('an interaction', 'a request').when(
+        mockService.given('a request', providerState: 'an interaction').when(
             'GET', '/resource', headers: {
           'Accept': 'application/json'
         }).then(200,
@@ -77,7 +76,8 @@ main() {
 
         // define an interaction
         mockService
-            .given('the resource coal exists', 'a request for coal')
+            .given('a request for coal',
+                providerState: 'the resource coal exists')
             .when('GET', '/resource/coal', headers: {
           'Accept': 'application/json'
         }).then(200,
@@ -121,7 +121,8 @@ main() {
 
         // define an interaction
         mockService
-            .given('the resource coal exists', 'a request for coal')
+            .given('a request for coal',
+                providerState: 'the resource coal exists')
             .when('GET', '/resource/coal', headers: {
           'Accept': 'application/json'
         }).then(200,
@@ -138,12 +139,7 @@ main() {
 
       test('then Pact will verify the interaction and write a Pact file',
           () async {
-        mockService.verifyAndWrite().then((val) {
-          var pactDetails =
-              new File('/pacts/pactconsumerdart-pact-mock-service.json')
-                  .readAsStringSync();
-          expect(pactDetails, isNotEmpty);
-        });
+        expect(mockService.verifyAndWrite(), completes);
       });
 
       tearDown(() async {

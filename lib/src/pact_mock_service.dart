@@ -55,20 +55,15 @@ class PactMockService {
 
   /// Returns a new instance of [PactInteraction] using the provided [providerState] and [description].
   ///
-  /// Throws a [StateError] if either [providerState] or [description] is an empty String.
-  PactInteraction given(String providerState, String description) {
-    if (providerState.isEmpty) {
-      throw new StateError(
-          'while creating PactInteraction, `providerState` cannot be an empty String.');
-    }
-
+  /// Throws a [StateError] if [description] is an empty String.
+  PactInteraction given(String description, {String providerState}) {
     if (description.isEmpty) {
       throw new StateError(
           'while creating PactInteraction, `description` cannot be an empty String.');
     }
 
-    PactInteraction interaction =
-        (new PactInteraction()).given(providerState, description);
+    PactInteraction interaction = (new PactInteraction())
+        .given(description, providerState: providerState);
     _interactions.add(interaction);
     return interaction;
   }

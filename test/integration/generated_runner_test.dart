@@ -13,7 +13,9 @@
 // limitations under the License.
 
 import './pact_consumer_dart_test.dart' as pactConsumerTest;
+import './flex_match_test.dart' as flexMatchTest;
 
 void main() {
   pactConsumerTest.main();
+  flexMatchTest.main();
 }

@@ -35,6 +35,7 @@ nbproject
 .CVS
 node_modules
 pacts
+doc
 bower_components
 _temp
 .vagrant

@@ -178,26 +178,10 @@ main() {
         });
 
         test('should return an instance of PactInteraction', () {
-          var match =
-              mockService.given('a provider state', 'that has a description');
+          var match = mockService.given('that has a description',
+              providerState: 'a provider state');
 
           expect(match, new isInstanceOf<PactInteraction>());
-        });
-      });
-
-      group('when passed an invalid String as `providerState`', () {
-        setUp(() {
-          mockService = new PactMockService(
-              fixture['consumer'], fixture['provider'],
-              host: fixture['host']);
-        });
-
-        test('should throw StateError', () {
-          var callGiven = () {
-            mockService.given('', 'that has a description');
-          };
-
-          expect(callGiven, throwsStateError);
         });
       });
 
@@ -210,7 +194,7 @@ main() {
 
         test('should throw StateError', () {
           var callGiven = () {
-            mockService.given('a providerState', '');
+            mockService.given('');
           };
 
           expect(callGiven, throwsStateError);
@@ -233,7 +217,8 @@ main() {
 
           // create some interactions
           var interaction = mockService
-              .given('a Provider state', 'a request for a resource')
+              .given('a request for a resource',
+                  providerState: 'a Provider state')
               .when('GET', '/resource')
               .then(200,
                   headers: {'Content-Type': 'application/json'},

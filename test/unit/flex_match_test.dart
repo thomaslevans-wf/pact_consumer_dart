@@ -14,21 +14,15 @@
 
 import 'package:test/test.dart';
 
-import 'package:pact_consumer_dart/src/pact_match.dart';
+import 'package:pact_consumer_dart/src/flex_match.dart';
 
 main() {
-  group('PactMatch', () {
-    var somethingLike = PactMatch.somethingLike;
-    var term = PactMatch.term;
-    var eachLike = PactMatch.eachLike;
+  group('FlexMatch', () {
+    var somethingLike = FlexMatch.somethingLike;
+    var term = FlexMatch.term;
+    var eachLike = FlexMatch.eachLike;
 
     group('term', () {
-      var createTheTerm = (badArg) {
-        return () {
-          term(badArg);
-        };
-      };
-
       group('when provided a term', () {
         test('should return a serialized Ruby object', () {
           var expected = {
@@ -39,23 +33,21 @@ main() {
             }
           };
 
-          var match = term({'generate': 'myawesomeword', 'matcher': '\\w+'});
+          var match = term('myawesomeword', '\\w+');
 
           expect(match, equals(expected));
         });
       });
 
-      group('when no term is provided', () {
-        test('should throw an Exception', () {
-          expect(term, throws);
-        });
-      });
+      group('when an invalid term is provided', () {
+        test('should throw an StateError', () {
+          var createTheTerm = (badArg1, badArg2) {
+            return () {
+              term(badArg1, badArg2);
+            };
+          };
 
-      group('when an invlid term is provided', () {
-        test('should throw an Exception', () {
-          expect(createTheTerm({}), throws);
-          expect(createTheTerm({'generate': 'foo'}), throws);
-          expect(createTheTerm({'matcher': '\\w+'}), throws);
+          expect(createTheTerm('', ''), throwsStateError);
         });
       });
     });
@@ -82,14 +74,14 @@ main() {
         };
 
         group('when no value is provided', () {
-          test('should throw an Exception', () {
-            expect(createTheValue(null), throws);
+          test('should throw an StateError', () {
+            expect(createTheValue(null), throwsStateError);
           });
         });
 
         group('when an invalid value is provided', () {
-          test('should throw an Exception', () {
-            expect(createTheValue(() {}), throws);
+          test('should throw an StateError', () {
+            expect(createTheValue(() {}), throwsStateError);
           });
         });
       });
@@ -104,7 +96,7 @@ main() {
             'min': 1
           };
 
-          var match = eachLike(null, {'min': 1});
+          var match = eachLike(null, min: 1);
 
           expect(match, equals(expected));
         });
@@ -113,23 +105,23 @@ main() {
       group('when options.min is invalid', () {
         var createTheMin = (badArg) {
           return () {
-            eachLike(badArg.first, badArg.last);
+            eachLike(badArg.first, min: badArg.last);
           };
         };
 
-        test('should throw an Exception', () {
+        test('should throw a StateError', () {
           expect(
               createTheMin([
                 {'a': 1},
-                {'min': 0}
+                0
               ]),
-              throws);
+              throwsStateError);
           expect(
               createTheMin([
                 {'a': 1},
-                {'min': null}
+                -8
               ]),
-              throws);
+              throwsStateError);
         });
       });
 
@@ -141,7 +133,7 @@ main() {
             'min': 1
           };
 
-          var match = eachLike([1, 2, 3], {'min': 1});
+          var match = eachLike([1, 2, 3]);
 
           expect(match, equals(expected));
         });
@@ -155,7 +147,7 @@ main() {
             'min': 1
           };
 
-          var match = eachLike('test', {'min': 1});
+          var match = eachLike('test');
 
           expect(match, equals(expected));
         });
@@ -172,7 +164,7 @@ main() {
               'min': 1
             };
 
-            var match = eachLike({'id': somethingLike(10)}, {'min': 1});
+            var match = eachLike({'id': somethingLike(10)});
 
             expect(match, equals(expected));
           });
@@ -198,11 +190,7 @@ main() {
               'min': 1
             };
 
-            var match = eachLike({
-              'colour': term({'generate': 'red', 'matcher': 'red|green'})
-            }, {
-              'min': 1
-            });
+            var match = eachLike({'colour': term('red', 'red|green')});
 
             expect(match, equals(expected));
           });
@@ -220,7 +208,7 @@ main() {
               'min': 1
             };
 
-            var match = eachLike(eachLike('blue', {'min': 1}), {'min': 1});
+            var match = eachLike(eachLike('blue'));
 
             expect(match, equals(expected));
           });
@@ -262,18 +250,12 @@ main() {
               'min': 1
             };
 
-            var match = eachLike(
-                eachLike({
-                  'size': somethingLike(10),
-                  'colour':
-                      term({'generate': 'red', 'matcher': 'red|green|blue'}),
-                  'tag': eachLike(
-                      [somethingLike('jumper'), somethingLike('shirt')],
-                      {'min': 2})
-                }, {
-                  'min': 1
-                }),
-                {'min': 1});
+            var match = eachLike(eachLike({
+              'size': somethingLike(10),
+              'colour': term('red', 'red|green|blue'),
+              'tag': eachLike([somethingLike('jumper'), somethingLike('shirt')],
+                  min: 2)
+            }));
 
             expect(match, equals(expected));
           });
@@ -302,7 +284,7 @@ main() {
             'min': 3
           };
 
-          var match = eachLike({'a': 1}, {'min': 3});
+          var match = eachLike({'a': 1}, min: 3);
 
           expect(match, equals(expected));
         });

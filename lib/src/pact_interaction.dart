@@ -34,18 +34,13 @@ class PactInteraction {
   /// Returns this instance of [PactInteraction] with the provided [providerState] and [description].
   ///
   /// Throws [StateError] if either [providerState] or [description] is an empty String
-  PactInteraction given(String providerState, String description) {
-    if (providerState.isEmpty) {
-      throw new StateError(
-          'PactInteraction.given := `providerState` cannot be an empty String.');
-    }
-    _providerState = providerState;
-
+  PactInteraction given(String description, {String providerState}) {
     if (description.isEmpty) {
       throw new StateError(
           'PactInteraction.uponReceiving := `description` cannot be an empty String.');
     }
     _description = description;
+    _providerState = providerState;
 
     return this;
   }

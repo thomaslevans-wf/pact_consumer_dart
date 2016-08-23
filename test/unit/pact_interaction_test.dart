@@ -18,6 +18,34 @@ import 'package:pact_consumer_dart/src/pact_interaction.dart';
 
 main() {
   group('PactInteraction', () {
+    group('given', () {
+      PactInteraction interaction;
+
+      setUp(() {
+        interaction = new PactInteraction();
+      });
+
+      group('when invoked with the optional param providerState', () {
+        test('should use the provider state passed', () {
+          var expected = 'state';
+          var map = interaction
+              .given('some interaction', providerState: expected)
+              .toMap();
+          expect(map['provider_state'], equals(expected));
+        });
+      });
+
+      group('when invoked with an empty description', () {
+        test('should throw StateError', () {
+          var callGiven = () {
+            interaction.given('');
+          };
+
+          expect(callGiven, throwsStateError);
+        });
+      });
+    });
+
     group('when', () {
       PactInteraction interaction;
 

@@ -57,12 +57,13 @@ Declaring, or staging, an interaction follows the same BDD style highlighted abo
 
 ```
 mockService
-  .given('the resource coal exists','a request for the resource coal')
+  .given('a request for the resource coal', providerState: 'the resource coal exists')
   .when('GET', '/resource/coal', headers: {
     'Accept': 'application/json'
   })
   .then(200, headers: {'Content-Type': 'application/json'}, body: {'resource':'coal'});
 ```
+_Note: The optional param `providerState` passed to given should be omitted when there is no setup required in the state of the provider for the interaction_
 
 ### Setting up an Interaction
 Once an interaction has been staged we can setup the Pact service to use the interaction.
@@ -84,8 +85,11 @@ For any given interaction received by Pact, the interaction remains unverified u
 mockService.verifyAndWrite();
 ```
 This will write out all verified interactions as JSON, which will appear in the `/pact` directory by default.
+
+
 ## Flexible Matching
-_Coming Soon_
+pact_consumer_dart supports [Flexible Matching](http://docs.pact.io/documentation/matching.html) according to the Pact Specification 2.0.0, read the specification docs provided by Pact for deeper understanding and usage.
+
 
 ## Notes and Helpful Links
 pact_consumer_dart leverages w_transport in order to be platform agnostic. This means that this library can be used to write contract tests, regardless if the Consumer is client or server. This benefit does not come without added configuration. Thus when using pact_consumer_dart it is necessary to configure w_transport for the given consumer's platform.

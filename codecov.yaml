@@ -1,25 +1,27 @@
 codecov:
   branch: master
+  bot: thomaslevans-wf
 
 coverage:
-  precision: 2
-  round: down
-  range: "70...100"
-
   status:
     project:
-      default:
-        target: auto
+      unit:
+        paths:
+          - "test/unit/"
+      integration:
+        paths:
+          - "test/integration/"
 
     patch:
-      default:
-        target: auto
-
-    changes:
-      default:
-        branches: null
+      unit:
+        paths:
+          - "test/unit/"
+      integration:
+        paths:
+          - "test/integration/"
 
 comment:
-  layout: "header, diff, changes, sunburst, uncovered, tree"
+  layout: "header, diff"
   branches: null
   behavior: default
+  require_changes: false

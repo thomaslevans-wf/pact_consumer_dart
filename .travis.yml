@@ -14,18 +14,18 @@ before_install:
 
 script:
   # Run static analysis checks
-  - pub run dart_dev format --check
-  - pub run dart_dev analyze
+  # - pub run dart_dev format --check
+  # - pub run dart_dev analyze
 
   # Run unit tests
-  - pub run dart_dev test
+  - xvfb-run -s '-screen 0 1024x768x24' pub run dart_dev test
 
   # Run integration tests
-  - bash ./tool/scripts/integration_setup_and_run_task.sh
+  # - bash ./tool/scripts/integration_setup_and_run_task.sh
 
   # Get test coverage data
-  - pub run dart_dev coverage --no-html
+  # - pub run dart_dev coverage --no-html
 
-after_success:
+# after_success:
   # Send coverage report to codecov
-  - bash ./tool/scripts/codecov.sh
+  # - bash ./tool/scripts/codecov.sh

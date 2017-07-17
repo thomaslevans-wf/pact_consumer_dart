@@ -1,31 +1,16 @@
-sudo: required
-
 language: dart
 dart:
-  - stable
+  - 1.24.2
 with_content_shell: true
-
-services:
-  - docker
-
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-
+  - sleep 3
 script:
-  # Run static analysis checks
-  # - pub run dart_dev format --check
-  # - pub run dart_dev analyze
-
-  # Run unit tests
-  - xvfb-run -s '-screen 0 1024x768x24' pub run dart_dev test
-
-  # Run integration tests
-  # - bash ./tool/scripts/integration_setup_and_run_task.sh
-
-  # Get test coverage data
-  # - pub run dart_dev coverage --no-html
-
-# after_success:
-  # Send coverage report to codecov
-  # - bash ./tool/scripts/codecov.sh
+  - npm install
+  - pub get --packages-dir
+  - pub run dart_dev format --check
+  - pub run dart_dev analyze
+  - pub run dart_dev test --no-integration
+  - pub run dart_dev coverage --no-html
+  - bash <(curl -s https://codecov.io/bash) -f coverage/coverage.lcov

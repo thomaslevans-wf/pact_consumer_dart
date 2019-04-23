@@ -13,11 +13,14 @@
 // limitations under the License.
 
 import 'package:test/test.dart';
-import 'package:w_transport/w_transport_mock.dart';
+import 'package:w_transport/mock.dart';
+import 'package:w_transport/vm.dart';
 
+import 'package:w_transport/w_transport.dart';
 import 'package:pact_consumer_dart/src/pact_mock_service_requests.dart';
 
 main() {
+  configureWTransportForVM();
   group('PactMockServiceRequests', () {
     String baseUrl = 'http://localhost:1234';
 
@@ -38,7 +41,7 @@ main() {
       group('when called with valid params', () {
         test('should return a Response', () async {
           var res = await fut(baseUrl);
-          expect(res, new isInstanceOf<MockResponse>());
+          expect(res, isA<Response>());
           expect(res.status, equals(200));
         });
       });
@@ -65,7 +68,7 @@ main() {
       group('when called with valid params', () {
         test('should return a Response', () async {
           var res = await fut({}, baseUrl);
-          expect(res, new isInstanceOf<MockResponse>());
+          expect(res, isA<Response>());
           expect(res.status, equals(200));
         });
       });
@@ -92,7 +95,7 @@ main() {
       group('when called with valid params', () {
         test('should return a Response', () async {
           var res = await fut({}, baseUrl);
-          expect(res, new isInstanceOf<MockResponse>());
+          expect(res, isA<MockResponse>());
           expect(res.status, equals(200));
         });
       });
@@ -119,7 +122,7 @@ main() {
       group('when called with valid params', () {
         test('should return a Response', () async {
           var res = await fut(baseUrl);
-          expect(res, new isInstanceOf<MockResponse>());
+          expect(res, isA<MockResponse>());
           expect(res.status, equals(200));
         });
       });

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:test/test.dart';
-import 'package:w_transport/w_transport_mock.dart';
+import 'package:w_transport/mock.dart';
 
 import 'package:pact_consumer_dart/src/pact_mock_service.dart';
 import 'package:pact_consumer_dart/src/pact_interaction.dart';
@@ -30,6 +30,7 @@ main() {
 
       group('when `host` is provided', () {
         setUp(() {
+          configureWTransportForTest();
           Uri uri = Uri.parse('http://' +
               fixture['host'] +
               ':' +
@@ -42,7 +43,7 @@ main() {
 
           mockService = new PactMockService(
               fixture['consumer'], fixture['provider'],
-              host: fixture['host']);
+              host: fixture['host'], dir : '~/pacts');
         });
 
         test('should use the host option in request', () {
@@ -90,7 +91,7 @@ main() {
 
           mockService = new PactMockService(
               fixture['consumer'], fixture['provider'],
-              host: fixture['host']);
+              host: fixture['host'], dir : '~/pacts');
         });
 
         test('should use the default port, 1234', () {
@@ -109,7 +110,7 @@ main() {
 
           mockService = new PactMockService(
               fixture['consumer'], fixture['provider'],
-              port: port);
+              port: port, dir : '~/pacts');
         });
         test('should use the provided port', () {
           expect(mockService.resetSession(), completes);
@@ -123,7 +124,7 @@ main() {
       setUp(() {
         mockService = new PactMockService(
             fixture['consumer'], fixture['provider'],
-            host: fixture['host']);
+            host: fixture['host'], dir : '~/pacts');
       });
 
       group('when there is a bad response', () {
@@ -174,14 +175,14 @@ main() {
         setUp(() {
           mockService = new PactMockService(
               fixture['consumer'], fixture['provider'],
-              host: fixture['host']);
+              host: fixture['host'], dir : '~/pacts');
         });
 
         test('should return an instance of PactInteraction', () {
           var match = mockService.given('that has a description',
               providerState: 'a provider state');
 
-          expect(match, new isInstanceOf<PactInteraction>());
+          expect(match, const TypeMatcher<PactInteraction>());
         });
       });
 
@@ -189,7 +190,7 @@ main() {
         setUp(() {
           mockService = new PactMockService(
               fixture['consumer'], fixture['provider'],
-              host: fixture['host']);
+              host: fixture['host'], dir : '~/pacts');
         });
 
         test('should throw StateError', () {
@@ -208,7 +209,7 @@ main() {
       setUp(() {
         mockService = new PactMockService(
             fixture['consumer'], fixture['provider'],
-            host: fixture['host']);
+            host: fixture['host'], dir : '~/pacts');
       });
 
       group('when called and there is an interaction staged', () {
@@ -248,7 +249,7 @@ main() {
 
         test('should `POST` the staged interaction', () async {
           var match = await mockService.setup();
-          expect(match, new isInstanceOf<PactMockService>());
+          expect(match, const TypeMatcher<PactMockService>());
         });
 
         tearDown(() {
@@ -274,7 +275,7 @@ main() {
         writeUri = Uri.parse('http://localhost:1234/pact');
         mockService = new PactMockService(
             fixture['consumer'], fixture['provider'],
-            host: fixture['host']);
+            host: fixture['host'], dir : '~/pacts');
       });
 
       group('when the interaction is verified and the pact is written', () {

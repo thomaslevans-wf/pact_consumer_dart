@@ -27,7 +27,7 @@ main(List<String> args) async {
 
   config.copyLicense.directories = ['lib/', 'test/'];
 
-  config.format.directories = ['lib/', 'test/', 'tool'];
+  config.format.paths = ['lib/', 'test/', 'tool'];
 
   config.test
     ..integrationTests = ['test/integration/generated_runner_test.dart']

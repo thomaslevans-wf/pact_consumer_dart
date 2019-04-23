@@ -15,7 +15,7 @@
 @TestOn('vm')
 import 'package:test/test.dart';
 import 'package:w_transport/w_transport.dart';
-import 'package:w_transport/w_transport_vm.dart';
+import 'package:w_transport/vm.dart';
 import 'package:pact_consumer_dart/pact_consumer_dart.dart';
 
 main() {
@@ -26,7 +26,7 @@ main() {
       setUpAll(() async {
         configureWTransportForVM();
         mockService =
-            new PactMockService('PactConsumerDart', 'PactMockService');
+            new PactMockService('PactConsumerDart', 'PactMockService', dir : '~/pacts');
 
         // ensure Pact service is purged of interactions
         await mockService.resetSession();
@@ -67,7 +67,7 @@ main() {
       setUp(() async {
         configureWTransportForVM();
         mockService =
-            new PactMockService('PactConsumerDart', 'PactMockService');
+            new PactMockService('PactConsumerDart', 'PactMockService', dir : '~/pacts');
 
         // ensure Pact service is purged of interactions
         await mockService.resetSession();
@@ -112,7 +112,7 @@ main() {
       setUp(() async {
         configureWTransportForVM();
         mockService =
-            new PactMockService('PactConsumerDart', 'PactMockService');
+            new PactMockService('PactConsumerDart', 'PactMockService', dir : '~/pacts');
 
         // ensure Pact service is purged of interactions
         await mockService.resetSession();

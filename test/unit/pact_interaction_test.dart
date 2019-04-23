@@ -79,7 +79,7 @@ main() {
         test('should return the instance of PactInteraction', () {
           var match = interaction.when('GET', 'a/path');
 
-          expect(match, new isInstanceOf<PactInteraction>());
+          expect(match, const TypeMatcher<PactInteraction>());
         });
       });
 
@@ -125,7 +125,7 @@ main() {
           var body = {'someKey': 'someValue'};
           var match = interaction.then(200, headers: headers, body: body);
 
-          expect(match, new isInstanceOf<PactInteraction>());
+          expect(match, const TypeMatcher<PactInteraction>());
         });
       });
     });

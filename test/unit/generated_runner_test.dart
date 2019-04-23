@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:w_transport/w_transport_mock.dart';
+import 'package:w_transport/mock.dart';
 
 import './flex_match_test.dart' as matchTest;
 import './pact_interaction_test.dart' as interactionTest;
